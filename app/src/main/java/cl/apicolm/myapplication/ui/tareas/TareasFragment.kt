@@ -1,4 +1,4 @@
-package cl.apicolm.myapplication.ui.slideshow
+package cl.apicolm.myapplication.ui.tareas
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import cl.apicolm.myapplication.R
 
-class SlideshowFragment : Fragment() {
+class TareasFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
+    private lateinit var slideshowViewModel: TareasViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -20,8 +20,8 @@ class SlideshowFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
+                ViewModelProviders.of(this).get(TareasViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_tareas, container, false)
         val textView: TextView = root.findViewById(R.id.text_slideshow)
         slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it

@@ -31,13 +31,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="cl.apicolm.myapplication.ui.gallery.GalleryFragment"
+        android:name="cl.apicolm.myapplication.ui.clima.ClimaFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_clima" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="cl.apicolm.myapplication.ui.slideshow.SlideshowFragment"
+        android:name="cl.apicolm.myapplication.ui.tareas.TareasFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_tareas" />
 </navigation>

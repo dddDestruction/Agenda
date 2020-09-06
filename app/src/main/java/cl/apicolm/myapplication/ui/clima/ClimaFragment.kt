@@ -1,24 +1,21 @@
-package cl.apicolm.myapplication.ui.gallery
+package cl.apicolm.myapplication.ui.clima
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.AgendaRepository
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
-import kotlinx.android.synthetic.main.fragment_gallery.*
-import kotlinx.android.synthetic.main.fragment_gallery.view.*
+import kotlinx.android.synthetic.main.fragment_clima.view.*
 
-class GalleryFragment : Fragment() {
+class ClimaFragment : Fragment() {
 
-    private lateinit var galleryViewModel: GalleryViewModel
+    private lateinit var galleryViewModel: ClimaViewModel
     val adapter = ClimaAdapter(listOf<ClimaEntidad>())
 
     override fun onCreateView(
@@ -35,7 +32,7 @@ class GalleryFragment : Fragment() {
             textView.text = it
         })
         */
-        val root = inflater.inflate(R.layout.fragment_gallery, container, false)
+        val root = inflater.inflate(R.layout.fragment_clima, container, false)
         val agenda = AgendaRepository(requireContext())
         agenda.loadData()
         agenda.climas.observe(viewLifecycleOwner, Observer {
