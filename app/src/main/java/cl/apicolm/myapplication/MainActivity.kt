@@ -1,6 +1,7 @@
 package cl.apicolm.myapplication
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import cl.apicolm.myapplication.model.AgendaRepository
 
 class MainActivity : AppCompatActivity() {
@@ -40,7 +42,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val agenda = AgendaRepository().loadData()
+        val agenda = AgendaRepository(this)
+        agenda.loadData()
+        agenda.climas.observe(this, Observer {
+            Log.d("AAA", "En Main, $it")
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
