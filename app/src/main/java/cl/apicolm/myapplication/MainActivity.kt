@@ -42,11 +42,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val agenda = AgendaRepository(this)
-        agenda.loadData()
-        agenda.climas.observe(this, Observer {
-            Log.d("AAA", "En Main, $it")
-        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
