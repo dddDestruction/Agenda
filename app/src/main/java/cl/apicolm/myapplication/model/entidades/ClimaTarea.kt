@@ -22,7 +22,8 @@ data class ClimaEntidad(
     var max:Double,
     var clima:String,
     var descripcionClima:String,
-    var iconClima:String
+    var iconClima:String,
+    var diaSemana:String
     //@Embedded val tarea: TareaEntidad
 )
 

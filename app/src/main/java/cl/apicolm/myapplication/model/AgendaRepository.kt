@@ -10,6 +10,7 @@ import cl.apicolm.myapplication.model.pojo.Clima
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import kotlin.math.truncate
 
 class AgendaRepository( val context: Context
@@ -58,13 +59,15 @@ class AgendaRepository( val context: Context
     }
 
     override fun mapperApiClima(clima: Clima): List<ClimaEntidad> {
+        var calendar = Calendar.getInstance()
         var listaClima = mutableListOf<ClimaEntidad>(ClimaEntidad(0,
             enCelsius(clima.current.temp),
             enCelsius(clima.daily[0].temp.min),
             enCelsius(clima.daily[0].temp.max),
             clima.current.weather.get(0).main,
             clima.current.weather.get(0).description,
-            clima.current.weather.get(0).icon
+            clima.current.weather.get(0).icon,
+            "Hoy"
         ))
         var i = 1
         for (ele in clima.daily){
@@ -77,7 +80,8 @@ class AgendaRepository( val context: Context
                         enCelsius(ele.temp.max),
                         ele.weather.get(0).main,
                         ele.weather.get(0).description,
-                        ele.weather.get(0).icon
+                        ele.weather.get(0).icon,
+                        calendar.diaSemana(i)
                     )
                 )
                 i++
@@ -90,5 +94,23 @@ class AgendaRepository( val context: Context
     override fun enCelsius(kelvin: Double): Double {
         return truncate(kelvin-272.15)
     }
+}
 
+fun Calendar.diaSemana(contador: Int):String{
+    var dia = fixDia(get(Calendar.DAY_OF_WEEK) + contador)
+    return when (dia){
+        Calendar.MONDAY -> "Lunes"
+        Calendar.TUESDAY -> "Martes"
+        Calendar.WEDNESDAY -> "Miercoles"
+        Calendar.THURSDAY -> "Jueves"
+        Calendar.FRIDAY -> "Viernes"
+        Calendar.SATURDAY -> "Sábado"
+        else ->"Domingo"
+    }
+}
+fun Calendar.fixDia(valor:Int):Int{
+    return when (valor > 7){
+        true -> valor - 7
+        false -> valor
+    }
 }

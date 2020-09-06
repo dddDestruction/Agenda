@@ -10,54 +10,84 @@ import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_clima.view.*
+import kotlinx.android.synthetic.main.item_clima.view.iconoClima
+import kotlinx.android.synthetic.main.item_clima.view.temp
+import kotlinx.android.synthetic.main.item_clima_cabecera.view.*
 
-class ClimaAdapter(private var lista: List<ClimaEntidad>) : RecyclerView.Adapter<ClimaAdapter.ClimaHolder>() {
+class ClimaAdapter(private var lista: List<ClimaEntidad>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val selectedItem = MutableLiveData<ClimaEntidad>()
 
+    val CABEZAL = 1
+    val CLIMA = 2
+
     class ClimaHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val texto = itemView.temp
+        val dia = itemView.dia
         val imagen = itemView.iconoClima
         val view = itemView.cardView
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClimaAdapter.ClimaHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_clima, parent, false)
+    class ClimaHolderCabecera(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val texto = itemView.temp
+        val dia = itemView.dia_cabecera
+        val imagen = itemView.iconoClima
+        val view = itemView.cardView_cabecera
+    }
 
-        return ClimaHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType){
+            1 -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_clima_cabecera, parent, false)
+                return ClimaHolderCabecera(view)
+            }
+            else -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_clima, parent, false)
+                return ClimaHolder(view)
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position == 0){
+            return CABEZAL
+        }
+        return CLIMA
     }
 
     override fun getItemCount(): Int {
         return lista.size
     }
 
-    override fun onBindViewHolder(holder: ClimaAdapter.ClimaHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var clima = lista.get(position)
-        when(position){
-            0 -> {
-                val blanco = ContextCompat.getColor(holder.view.context, R.color.colorWhite)
-                val azul = ContextCompat.getColor(holder.view.context, R.color.colorAccent)
+        when(holder){
+            is ClimaHolderCabecera -> {
                 holder.texto.text = clima.temp.toString()
-                holder.texto.setTextColor(blanco)
-                holder.view.setBackgroundColor(azul)
+                holder.dia.text = clima.diaSemana
                 Picasso.get()
                     .load("http://openweathermap.org/img/wn/${clima.iconClima}@4x.png")
                     .resize(250, 250)
                     .centerCrop()
                     .into(holder.imagen)
+                holder.view.setOnClickListener{
+                    selectedItem.value = clima
+                }
             }
-            else ->{
+            is ClimaHolder ->{
                 holder.texto.text = clima.temp.toString()
+                holder.dia.text = clima.diaSemana
                 Picasso.get()
                     .load("http://openweathermap.org/img/wn/${clima.iconClima}@4x.png")
                     .resize(120, 120)
                     .centerCrop()
                     .into(holder.imagen)
+                holder.view.setOnClickListener{
+                    selectedItem.value = clima
+                }
             }
-        }
-        holder.view.setOnClickListener{
-            selectedItem.value = clima
         }
     }
 
