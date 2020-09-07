@@ -17,7 +17,6 @@ interface AgendaDao {
     fun getAllClimas(): LiveData<List<ClimaEntidad>>
 
     //Obtiene todos los valores de tareas de un dia desde Room DB
-    //@Transaction
     @Query("SELECT * FROM tareas WHERE climaId = :id")
     fun getAllTareas(id:Int): LiveData<List<TareaEntidad>>
 

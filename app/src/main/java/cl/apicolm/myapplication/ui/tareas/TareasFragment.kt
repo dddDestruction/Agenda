@@ -19,13 +19,19 @@ import kotlinx.android.synthetic.main.fragment_tareas.view.*
 class TareasFragment : Fragment() {
 
     private lateinit var tareasViewModel: TareasViewModel
-    private var climaId:Int = 1
+    private var climaId:Int = 0
 
-    val adapter = TareasAdapter(listOf<TareaEntidad>(
-        TareaEntidad(1, "nada", "aadad"),
-        TareaEntidad(1, "nadar", "aadad"),
-        TareaEntidad(1, "Aloja", "aadad")
-    ))
+    private lateinit var adapter: TareasAdapter
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        if  (requireArguments().getInt("climaId") != null){
+            Log.d("AAA", "valor bundle ${requireArguments().getInt("climaId")}")
+            climaId = requireArguments().getInt("climaId")
+            Log.d("AAA", "climaId after bundle $climaId")
+            initObservers(climaId)
+        }
+        super.onActivityCreated(savedInstanceState)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -34,20 +40,9 @@ class TareasFragment : Fragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.fragment_tareas, container, false)
-        initObservers(climaId)
         initRecycler(root)
-        return root
-    }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            TareasFragment().apply {
-                arguments = Bundle().apply {
-                    Log.d("AAA", "En TareasFragment climaId Bundle ${this.getInt("climaID")}")
-                    climaId = this.getInt("climaID")
-                }
-            }
+        return root
     }
 
     fun initObservers(climaId:Int){
@@ -55,9 +50,14 @@ class TareasFragment : Fragment() {
             ViewModelProviders.of(this).get(TareasViewModel::class.java)
         tareasViewModel.loadTareas(climaId)
             .observe(viewLifecycleOwner, Observer {
+                for (ele in it){
+                    Log.d("AAA", "Lista tareas ${ele.climaId}")
+                }
+
                 adapter.update(it)
             })
         adapter.selectedItem.observe(viewLifecycleOwner, Observer{
+            Log.d("AAA", "Lista tareas ${climaId}")
             tareasViewModel.repository.insetarTarea(TareaEntidad(
                 climaId,
                 it,
@@ -66,6 +66,7 @@ class TareasFragment : Fragment() {
         })
     }
     fun initRecycler(root:View){
+        adapter = TareasAdapter(listOf<TareaEntidad>())
         val recyclerView = root.recyclerTarea
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

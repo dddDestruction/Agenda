@@ -25,7 +25,6 @@ class AgendaRepository( val context: Context
         //, scope
         )
     var climas = agendaManager.getClimas()
-    lateinit var tareas: LiveData<List<TareaEntidad>>
     var climasApi = mutableListOf<Clima>()
 
     override fun loadData() {
@@ -63,6 +62,7 @@ class AgendaRepository( val context: Context
     }
 
     override fun loadTareas(climaId:Int):LiveData<List<TareaEntidad>> {
+        Log.d("AAA", "loadTareas ${agendaManager.getTareas(climaId).value}")
         return agendaManager.getTareas(climaId)
     }
 
