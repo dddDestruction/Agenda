@@ -7,9 +7,12 @@ import cl.apicolm.myapplication.model.db.AgendaDBManager
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 import cl.apicolm.myapplication.model.pojo.Clima
+import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.truncate
 
@@ -37,6 +40,14 @@ class AgendaRepository( val context: Context
                 if (response.body() != null){
                     agendaManager.insertarClimas(mapperApiClima(response.body()!!))
                 }
+                val calendar = Calendar.getInstance()
+                Log.d("AAA", "fecha ${SimpleDateFormat("dd/MM/yyyy").format(calendar.time)}")
+                if (diff(SharedPrefenrecesManager(context).getDate()) != 0L){
+                    SharedPrefenrecesManager(context).addSharedPreferences(
+                        SimpleDateFormat("dd/MM/yyyy").format(calendar.time)
+                    )
+                }
+                Log.d("AAA", "fecha desde Shared ${SharedPrefenrecesManager(context).getDate()}")
 
             }
 
@@ -94,6 +105,44 @@ class AgendaRepository( val context: Context
     override fun enCelsius(kelvin: Double): Double {
         return truncate(kelvin-272.15)
     }
+
+    override fun diff(fecha: String): Long {
+
+        val milisAdias = 24 * 60 * 60 * 1000
+        val valores = fecha.split("/")
+        val dia = Calendar.getInstance()
+
+        Log.d("AAA", "dia diff AgendaRepository ${dia.time}")
+        try {
+            dia.set(valores[2].toInt(), valores[1].toInt(), valores[0].toInt())
+        }catch (e:Exception){
+            Log.d("AAA", "Error diff AgendaRepository ${e.message}")
+        }
+        val hoy = Calendar.getInstance().timeInMillis/(milisAdias)-dia.timeInMillis/(milisAdias)
+
+        return hoy
+    }
+
+    override fun vigencia(tarea: TareaEntidad, diff: Long): Long {
+        return when(tarea.climaId - diff >= 0){
+            true -> tarea.climaId - diff
+            else -> 0
+        }
+    }
+
+    override fun tareasCleaner(listaTareas:List<TareaEntidad>):MutableList<TareaEntidad> {
+        val fecha = diff(SharedPrefenrecesManager(context).getDate())
+        val nuevaLista = mutableListOf<TareaEntidad>()
+        for (tarea in listaTareas){
+            var vigencia = vigencia(tarea, fecha).toInt()
+            if (vigencia != 0){
+                tarea.climaId = vigencia
+                nuevaLista.add(tarea)
+            }
+        }
+        return nuevaLista
+    }
+
 }
 
 fun Calendar.diaSemana(contador: Int):String{
