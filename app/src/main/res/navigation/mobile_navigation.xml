@@ -44,5 +44,10 @@
         android:id="@+id/nav_slideshow"
         android:name="cl.apicolm.myapplication.ui.tareas.TareasFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_tareas" />
+        tools:layout="@layout/fragment_tareas" >
+        <argument
+            android:name="climaId"
+            app:argType="integer"
+            android:defaultValue="1" />
+    </fragment>
 </navigation>

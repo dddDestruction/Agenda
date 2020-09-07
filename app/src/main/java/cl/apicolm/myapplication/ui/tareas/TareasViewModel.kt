@@ -1,13 +1,17 @@
 package cl.apicolm.myapplication.ui.tareas
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import cl.apicolm.myapplication.model.AgendaRepository
+import cl.apicolm.myapplication.model.entidades.TareaEntidad
 
-class TareasViewModel : ViewModel() {
+class TareasViewModel(application: Application) : AndroidViewModel(application)  {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is slideshow Fragment"
+    val repository = AgendaRepository(application
+        //, viewModelScope
+        )
+
+    fun loadTareas(climaId:Int): LiveData<List<TareaEntidad>>{
+        return repository.loadTareas(climaId)
     }
-    val text: LiveData<String> = _text
 }

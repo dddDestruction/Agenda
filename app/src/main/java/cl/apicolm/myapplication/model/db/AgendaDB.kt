@@ -5,8 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
+import cl.apicolm.myapplication.model.entidades.TareaEntidad
 
-@Database(entities = arrayOf(ClimaEntidad::class), version = 1)
+@Database(entities = arrayOf(ClimaEntidad::class, TareaEntidad::class), version = 1)
 abstract class AgendaDB  : RoomDatabase() {
 
     abstract fun dao(): AgendaDao

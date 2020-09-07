@@ -5,6 +5,7 @@ import androidx.room.Relation
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/*
 data class ClimaTarea(
     @Embedded val dia: ClimaEntidad,
     @Relation(
@@ -14,7 +15,9 @@ data class ClimaTarea(
     val tareas: List<TareaEntidad>
 )
 
-@Entity
+ */
+
+@Entity(tableName = "climas")
 data class ClimaEntidad(
     @PrimaryKey var id: Int,
     var temp: Double,
@@ -27,11 +30,11 @@ data class ClimaEntidad(
     //@Embedded val tarea: TareaEntidad
 )
 
+@Entity(tableName = "tareas")
 class TareaEntidad(
     var climaId:Int,
     var descripcion: String,
     var hora:String
-)/* {
+) {
     @PrimaryKey(autoGenerate = true) var id: Int? = null
 }
-        */

@@ -1,6 +1,8 @@
 package cl.apicolm.myapplication.ui.tareas
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_tareas.view.*
 class TareasFragment : Fragment() {
 
     private lateinit var tareasViewModel: TareasViewModel
+    private var climaId:Int = 1
+
     val adapter = TareasAdapter(listOf<TareaEntidad>(
         TareaEntidad(1, "nada", "aadad"),
         TareaEntidad(1, "nadar", "aadad"),
@@ -28,13 +32,39 @@ class TareasFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        tareasViewModel =
-                ViewModelProviders.of(this).get(TareasViewModel::class.java)
+
         val root = inflater.inflate(R.layout.fragment_tareas, container, false)
+        initObservers(climaId)
         initRecycler(root)
         return root
     }
 
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            TareasFragment().apply {
+                arguments = Bundle().apply {
+                    Log.d("AAA", "En TareasFragment climaId Bundle ${this.getInt("climaID")}")
+                    climaId = this.getInt("climaID")
+                }
+            }
+    }
+
+    fun initObservers(climaId:Int){
+        tareasViewModel =
+            ViewModelProviders.of(this).get(TareasViewModel::class.java)
+        tareasViewModel.loadTareas(climaId)
+            .observe(viewLifecycleOwner, Observer {
+                adapter.update(it)
+            })
+        adapter.selectedItem.observe(viewLifecycleOwner, Observer{
+            tareasViewModel.repository.insetarTarea(TareaEntidad(
+                climaId,
+                it,
+                "loquesea"
+            ))
+        })
+    }
     fun initRecycler(root:View){
         val recyclerView = root.recyclerTarea
         recyclerView.adapter = adapter

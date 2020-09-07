@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -51,7 +52,9 @@ class ClimaFragment : Fragment() {
 
     override fun onAttach(activity: Activity) {
         adapter.selectedItem.observe(this, Observer {
-            Navigation.findNavController(this.requireView()).navigate(R.id.action_nav_gallery_to_nav_slideshow)
+            val bundle = Bundle()
+            bundle.putInt("climaId", it.id )
+            Navigation.findNavController(this.requireView()).navigate(R.id.action_nav_gallery_to_nav_slideshow, bundle)
         })
         super.onAttach(activity)
     }

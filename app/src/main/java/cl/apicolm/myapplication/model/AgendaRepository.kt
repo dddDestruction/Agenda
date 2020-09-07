@@ -2,6 +2,7 @@ package cl.apicolm.myapplication.model
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
 import cl.apicolm.myapplication.model.api.RetrofitClient
 import cl.apicolm.myapplication.model.db.AgendaDBManager
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
@@ -24,7 +25,7 @@ class AgendaRepository( val context: Context
         //, scope
         )
     var climas = agendaManager.getClimas()
-    //var tareas = agendaManager.tareas
+    lateinit var tareas: LiveData<List<TareaEntidad>>
     var climasApi = mutableListOf<Clima>()
 
     override fun loadData() {
@@ -58,11 +59,11 @@ class AgendaRepository( val context: Context
     }
 
     override fun insetarTarea(tarea: TareaEntidad) {
-        TODO("Not yet implemented")
+        agendaManager.insertarTarea(tarea)
     }
 
-    override fun loadTareas(climaId:Int) {
-        TODO("Not yet implemented")
+    override fun loadTareas(climaId:Int):LiveData<List<TareaEntidad>> {
+        return agendaManager.getTareas(climaId)
     }
 
     override fun deleteTarea(tarea: TareaEntidad) {

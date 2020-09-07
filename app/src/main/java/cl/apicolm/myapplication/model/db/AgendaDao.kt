@@ -3,7 +3,7 @@ package cl.apicolm.myapplication.model.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
-import cl.apicolm.myapplication.model.entidades.ClimaTarea
+//import cl.apicolm.myapplication.model.entidades.ClimaTarea
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 
 @Dao
@@ -13,13 +13,13 @@ interface AgendaDao {
     fun insertClima(climas: List<ClimaEntidad>)
 
     //Obtiene todos los valores de clima desde Room DB
-    @Query("SELECT * FROM ClimaEntidad")
+    @Query("SELECT * FROM climas")
     fun getAllClimas(): LiveData<List<ClimaEntidad>>
-/*
+
     //Obtiene todos los valores de tareas de un dia desde Room DB
-    @Transaction
-    @Query("SELECT * FROM TareaEntidad WHERE climaId = :id")
-    fun getAllTareas(id:Int): LiveData<List<ClimaTarea>>
+    //@Transaction
+    @Query("SELECT * FROM tareas WHERE climaId = :id")
+    fun getAllTareas(id:Int): LiveData<List<TareaEntidad>>
 
     //Inserta las tareas
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -29,5 +29,4 @@ interface AgendaDao {
     @Delete
     fun borrarTarea( tarea: TareaEntidad)
 
- */
 }
