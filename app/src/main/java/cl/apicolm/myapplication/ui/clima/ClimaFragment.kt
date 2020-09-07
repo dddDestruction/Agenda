@@ -1,5 +1,6 @@
 package cl.apicolm.myapplication.ui.clima
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.AgendaRepository
@@ -44,5 +47,12 @@ class ClimaFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         return root
+    }
+
+    override fun onAttach(activity: Activity) {
+        adapter.selectedItem.observe(this, Observer {
+            Navigation.findNavController(this.requireView()).navigate(R.id.action_nav_gallery_to_nav_slideshow)
+        })
+        super.onAttach(activity)
     }
 }

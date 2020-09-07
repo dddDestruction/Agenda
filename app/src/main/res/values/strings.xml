@@ -13,4 +13,6 @@
 
     <string name="home_second">Home Second</string>
     <string name="unidad_temp">°C</string>
+    <string name="ingresar_tarea">Ingresar tarea</string>
+    <string name="aceptar">Aceptar</string>
 </resources>
