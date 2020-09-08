@@ -12,7 +12,6 @@ import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.truncate
@@ -26,6 +25,7 @@ class AgendaRepository( val context: Context
         )
     var climas = agendaManager.getClimas()
     var climasApi = mutableListOf<Clima>()
+    val repoUtil = RepoUtil()
 
     override fun loadData() {
 
@@ -144,23 +144,4 @@ class AgendaRepository( val context: Context
         return nuevaLista
     }
 
-}
-
-fun Calendar.diaSemana(contador: Int):String{
-    var dia = fixDia(get(Calendar.DAY_OF_WEEK) + contador)
-    return when (dia){
-        Calendar.MONDAY -> "Lunes"
-        Calendar.TUESDAY -> "Martes"
-        Calendar.WEDNESDAY -> "Miercoles"
-        Calendar.THURSDAY -> "Jueves"
-        Calendar.FRIDAY -> "Viernes"
-        Calendar.SATURDAY -> "Sábado"
-        else ->"Domingo"
-    }
-}
-fun Calendar.fixDia(valor:Int):Int{
-    return when (valor > 7){
-        true -> valor - 7
-        false -> valor
-    }
 }
