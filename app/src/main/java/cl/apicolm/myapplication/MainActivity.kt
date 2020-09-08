@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         //Se inicializa el objeto singleton
-        Picasso.setSingletonInstance(picasso)
+        //Picasso.setSingletonInstance(picasso)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->

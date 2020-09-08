@@ -1,13 +1,16 @@
 package cl.apicolm.myapplication.ui.clima
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import cl.apicolm.myapplication.model.AgendaRepository
+import cl.apicolm.myapplication.model.entidades.TareaEntidad
 
-class ClimaViewModel : ViewModel() {
+class ClimaViewModel(application: Application) : AndroidViewModel(application)  {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+    val repository = AgendaRepository(application, viewModelScope)
+    val climas = repository.climas
+
+    fun load(){
+        repository.loadData()
     }
-    val text: LiveData<String> = _text
 }

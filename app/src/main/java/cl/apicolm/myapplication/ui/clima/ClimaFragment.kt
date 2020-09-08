@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_clima.view.*
 
 class ClimaFragment : Fragment() {
 
-    private lateinit var galleryViewModel: ClimaViewModel
+    private lateinit var climasViewModel: ClimaViewModel
     val adapter = ClimaAdapter(listOf<ClimaEntidad>())
 
     override fun onCreateView(
@@ -27,19 +28,12 @@ class ClimaFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        /*
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel::class.java)
+        climasViewModel =
+                ViewModelProviders.of(this).get(ClimaViewModel::class.java)
 
-        val textView: TextView = root.findViewById(R.id.text_gallery)
-        galleryViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        */
         val root = inflater.inflate(R.layout.fragment_clima, container, false)
-        val agenda = AgendaRepository(requireContext())
-        agenda.loadData()
-        agenda.climas.observe(viewLifecycleOwner, Observer {
+        climasViewModel.load()
+        climasViewModel.climas.observe(viewLifecycleOwner, Observer {
             Log.d("AAA", "En Main, $it")
             adapter.update(it)
         })

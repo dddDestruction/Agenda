@@ -29,7 +29,7 @@ abstract class AgendaDB  : RoomDatabase() {
                     context.applicationContext,
                     AgendaDB::class.java,
                     "database"
-                ).allowMainThreadQueries().build()
+                ).build()
                 INSTANCE = instance
                 return instance
             }

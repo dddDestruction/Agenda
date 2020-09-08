@@ -10,7 +10,7 @@ import cl.apicolm.myapplication.model.entidades.TareaEntidad
 interface AgendaDao {
     //Inserta los valores de clima
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertClima(climas: List<ClimaEntidad>)
+    suspend fun insertClima(climas: List<ClimaEntidad>)
 
     //Obtiene todos los valores de clima desde Room DB
     @Query("SELECT * FROM climas")
@@ -22,10 +22,10 @@ interface AgendaDao {
 
     //Inserta las tareas
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTarea(tarea: TareaEntidad)
+    suspend fun insertTarea(tarea: TareaEntidad)
 
     //Borra una tarea
     @Delete
-    fun borrarTarea( tarea: TareaEntidad)
+    suspend fun borrarTarea( tarea: TareaEntidad)
 
 }

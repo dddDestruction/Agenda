@@ -9,6 +9,7 @@ import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 import cl.apicolm.myapplication.model.pojo.Clima
 import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
+import kotlinx.coroutines.CoroutineScope
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,13 +17,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.truncate
 
-class AgendaRepository( val context: Context
-    //, scope: CoroutineScope
-    ):IAgendaRepository {
+class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepository {
 
-    val agendaManager = AgendaDBManager(context
-        //, scope
-        )
+    val agendaManager = AgendaDBManager(context, scope)
     var climas = agendaManager.getClimas()
     var climasApi = mutableListOf<Clima>()
     val repoUtil = RepoUtil()
