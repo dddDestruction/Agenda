@@ -8,9 +8,9 @@ import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
 import java.util.*
 import kotlin.math.truncate
 
-class RepoUtil {
+class RepoUtil():IRepoUtil {
 
-    fun mapperApiClima(clima: Clima): List<ClimaEntidad> {
+    override fun mapperApiClima(clima: Clima): List<ClimaEntidad> {
         var calendar = Calendar.getInstance()
         var listaClima = mutableListOf<ClimaEntidad>(
             ClimaEntidad(0,
@@ -45,11 +45,11 @@ class RepoUtil {
         return listaClima
     }
 
-     fun enCelsius(kelvin: Double): Double {
+     override fun enCelsius(kelvin: Double): Double {
         return truncate(kelvin-272.15)
     }
 
-     fun diff(fecha: String): Long {
+     override fun diff(fecha: String): Long {
 
         val milisAdias = 24 * 60 * 60 * 1000
         val valores = fecha.split("/")
@@ -66,10 +66,22 @@ class RepoUtil {
         return hoy
     }
 
-     fun vigencia(tarea: TareaEntidad, diff: Long): Long {
-        return when(tarea.climaId - diff >= 0){
+     override fun vigencia(tarea: TareaEntidad, diff: Long): Long {
+        return when(tarea.climaId - diff >= 0L){
             true -> tarea.climaId - diff
-            else -> 0
+            else -> -1L
         }
+    }
+
+    override fun tareasCleaner(listaTareas:List<TareaEntidad>, diff:Long):MutableList<TareaEntidad> {
+        val nuevaLista = mutableListOf<TareaEntidad>()
+        for (tarea in listaTareas){
+            var vigencia = vigencia(tarea, diff).toInt()
+            if (vigencia != -1){
+                tarea.climaId = vigencia
+                nuevaLista.add(tarea)
+            }
+        }
+        return nuevaLista
     }
 }
