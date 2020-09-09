@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.AgendaRepository
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_clima.view.*
 
 class ClimaFragment : Fragment() {
@@ -28,22 +29,33 @@ class ClimaFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        climasViewModel =
-                ViewModelProviders.of(this).get(ClimaViewModel::class.java)
-
         val root = inflater.inflate(R.layout.fragment_clima, container, false)
+        try {
+            val fab: FloatingActionButton =requireActivity().findViewById(R.id.fab)
+            fab.visibility = View.GONE
+        }catch (e:Exception){
+            Log.d("AAA", "Error en fab ClimaFragment $e")
+        }
+        initViewModel()
+        initRecycler(root)
+        return root
+    }
+
+    fun initViewModel(){
+        climasViewModel =
+            ViewModelProviders.of(this).get(ClimaViewModel::class.java)
         climasViewModel.load()
         climasViewModel.climas.observe(viewLifecycleOwner, Observer {
             Log.d("AAA", "En Main, $it")
             adapter.update(it)
         })
+    }
+    fun initRecycler(root:View){
         val recyclerView = root.recycker_clima
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        return root
     }
-
     override fun onAttach(activity: Activity) {
         adapter.selectedItem.observe(this, Observer {
             val bundle = Bundle()

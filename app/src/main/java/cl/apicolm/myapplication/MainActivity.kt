@@ -3,6 +3,7 @@ package cl.apicolm.myapplication
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -14,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
 import cl.apicolm.myapplication.model.AgendaRepository
 import com.squareup.picasso.Picasso
@@ -38,9 +40,9 @@ class MainActivity : AppCompatActivity() {
         //Picasso.setSingletonInstance(picasso)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
+        fab.visibility = View.VISIBLE
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            findViewById<ConstraintLayout>(R.id.formulario).visibility = View.VISIBLE
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)

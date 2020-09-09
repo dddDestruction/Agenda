@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_clima.view.*
 import kotlinx.android.synthetic.main.fragment_tareas.view.*
 
@@ -41,7 +42,12 @@ class TareasFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_tareas, container, false)
         initRecycler(root)
-
+        try {
+            val fab: FloatingActionButton =requireActivity().findViewById(R.id.fab)
+            fab.visibility = View.VISIBLE
+        }catch (e:Exception){
+            Log.d("AAA", "Error en fab ClimaFragment $e")
+        }
         return root
     }
 
