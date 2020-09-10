@@ -6,10 +6,6 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "cl.apicolm.myapplication"
         minSdkVersion 21
@@ -106,11 +102,14 @@ dependencies {
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     //androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
 
+
     //truth dev
     testImplementation "com.google.truth:truth:1.0.1"
 
-    //test runners
+    //test instrumentales
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test:rules:1.3.0'
-
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+    //truth dev
+    androidTestImplementation 'androidx.test.ext:truth:1.3.0'
 }

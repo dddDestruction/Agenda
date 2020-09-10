@@ -71,6 +71,7 @@ class ClimaAdapter(private var lista: List<ClimaEntidad>) : RecyclerView.Adapter
                     .load("http://openweathermap.org/img/wn/${clima.iconClima}@4x.png")
                     .resize(250, 250)
                     .centerCrop()
+                    .placeholder(R.drawable.ic_cloud_download_black_100dp)
                     .into(holder.imagen)
                 holder.view.setOnClickListener{
                     selectedItem.value = clima
@@ -83,6 +84,7 @@ class ClimaAdapter(private var lista: List<ClimaEntidad>) : RecyclerView.Adapter
                     .load("http://openweathermap.org/img/wn/${clima.iconClima}@4x.png")
                     .resize(120, 120)
                     .centerCrop()
+                    .placeholder(R.drawable.ic_cloud_download_black_100dp)
                     .into(holder.imagen)
                 holder.view.setOnClickListener{
                     selectedItem.value = clima

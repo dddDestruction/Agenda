@@ -31,10 +31,9 @@ data class ClimaEntidad(
 )
 
 @Entity(tableName = "tareas")
-class TareaEntidad(
+data class TareaEntidad(
     var climaId:Int,
-    var descripcion: String,
-    var hora:String
+    var descripcion: String
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int? = null
 }

@@ -52,8 +52,7 @@ class HomeFragment : Fragment() {
             tareasViewModel.repository.insetarTarea(
                 TareaEntidad(
                     climaId,
-                    it,
-                    "loquesea"
+                    it
                 )
             )
         })

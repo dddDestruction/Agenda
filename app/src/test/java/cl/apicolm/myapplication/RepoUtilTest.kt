@@ -15,27 +15,27 @@ class RepoUtilTest {
 
     @Test
     fun vigencia_NoEsVigenteId1() {
-        val tareaEntidad = TareaEntidad(1, "tarea", "hora1")
+        val tareaEntidad = TareaEntidad(1, "tarea")
         Assert.assertEquals(-1L, repoUtil.vigencia(tareaEntidad, 3L))
     }
 
     @Test
     fun vigencia_NoEsVigenteId2() {
-        val tareaEntidad = TareaEntidad(2, "tarea", "hora1")
+        val tareaEntidad = TareaEntidad(2, "tarea")
         Assert.assertEquals(-1L, repoUtil.vigencia(tareaEntidad, 3L))
     }
 
     @Test
     fun vigencia_EsVigente() {
-        val tareaEntidad = TareaEntidad(5, "tarea", "hora1")
+        val tareaEntidad = TareaEntidad(5, "tarea")
         Assert.assertEquals(2L, repoUtil.vigencia(tareaEntidad, 3L))
     }
 
     @Test
     fun tareasCleaner_HappyCaseFiltro() {
-        val tarea1 = TareaEntidad(1, "tarea", "hora1")
-        val tarea2 = TareaEntidad(2, "tarea", "hora1")
-        val tarea3 = TareaEntidad(5, "tarea", "hora1")
+        val tarea1 = TareaEntidad(1, "tarea")
+        val tarea2 = TareaEntidad(2, "tarea")
+        val tarea3 = TareaEntidad(5, "tarea")
         val listaInicial = listOf<TareaEntidad>(
             tarea1,
             tarea2,
@@ -49,9 +49,9 @@ class RepoUtilTest {
 
     @Test
     fun tareasCleaner_HappyCaseCambioClimaId() {
-        val tarea1 = TareaEntidad(1, "tarea", "hora1")
-        val tarea2 = TareaEntidad(2, "tarea", "hora1")
-        val tarea3 = TareaEntidad(5, "tarea", "hora1")
+        val tarea1 = TareaEntidad(1, "tarea")
+        val tarea2 = TareaEntidad(2, "tarea")
+        val tarea3 = TareaEntidad(5, "tarea")
         val listaInicial = listOf<TareaEntidad>(
             tarea1,
             tarea2,

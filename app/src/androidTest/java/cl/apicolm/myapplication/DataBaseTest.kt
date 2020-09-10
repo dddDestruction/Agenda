@@ -3,8 +3,7 @@ package cl.apicolm.myapplication
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.room.Room
@@ -15,16 +14,14 @@ import cl.apicolm.myapplication.model.db.AgendaDB
 import cl.apicolm.myapplication.model.db.AgendaDao
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import com.google.common.truth.Truth.assertThat
+
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import java.io.IOException
@@ -41,12 +38,14 @@ class DataBaseTest {
     private lateinit var agendaDao: AgendaDao
     private lateinit var db: AgendaDB
     val context = ApplicationProvider.getApplicationContext<Context>()
-    val latch = CountDownLatch(1)
+
+    @get:Rule
+    var instantTastkExectorTest = InstantTaskExecutorRule()
     @Test
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("cl.apicolm.myapplication", appContext.packageName)
+        assertThat("cl.apicolm.myapplication").isEqualTo(appContext.packageName)
     }
 
     @Before
@@ -79,23 +78,27 @@ class DataBaseTest {
         )
         agendaDao.insertClima(listaClimas)
 
-        var listaRes = agendaDao.getAllClimas().getValueBlocking()
-        latch.await(10, TimeUnit.SECONDS)
-        assertEquals(listaClimas, listaRes)
+        agendaDao.getAllClimas().observeForever {
+            listaRes ->
+            assertThat(listaClimas).isEqualTo(listaRes)
+        }
+
     }
 
     @Test
     @Throws(Exception::class)
     fun insertarYobtenerTareas() = runBlocking {
         val tarea1 = TareaEntidad(1,
-            "tarea1",
-            "19:00"
+            "tarea1"
         )
 
         agendaDao.insertTarea(tarea1)
-        var listaRes = agendaDao.getAllTareas(1).getValueBlocking()
-        assertNotNull(listaRes)
-        //assertEquals(tarea1, listaRes[0])
+        agendaDao.getAllTareas(1).observeForever {
+            listaRes->
+            assertThat(listaRes).isNotNull()
+            assertThat(listaRes).hasSize(1)
+            assertThat(listaRes[0]).isEqualTo(tarea1)
+        }
 
     }
 }

@@ -66,8 +66,7 @@ class TareasFragment : Fragment() {
             Log.d("AAA", "Lista tareas ${climaId}")
             tareasViewModel.repository.insetarTarea(TareaEntidad(
                 climaId,
-                it,
-                "loquesea"
+                it
             ))
         })
     }
