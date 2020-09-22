@@ -18,14 +18,19 @@ interface AgendaDao {
 
     //Obtiene todos los valores de tareas de un dia desde Room DB
     @Query("SELECT * FROM tareas WHERE climaId = :id")
-    fun getAllTareas(id:Int): LiveData<List<TareaEntidad>>
+    fun getTareas(id:Int): LiveData<List<TareaEntidad>>
+
+    //Obtiene todos los valores de tareas de un dia desde Room DB
+    @Query("SELECT * FROM tareas")
+    fun getAllTareas(): LiveData<List<TareaEntidad>>
 
     //Inserta las tareas
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTarea(tarea: TareaEntidad)
+    suspend fun insertTarea(tarea: List<TareaEntidad>)
 
-    //Borra una tarea
-    @Delete
-    suspend fun borrarTarea( tarea: TareaEntidad)
+
+    //Borra el contenido de la tabla tareas
+    @Query("Delete FROM tareas")
+    suspend fun borrarTarea()
 
 }

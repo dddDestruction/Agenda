@@ -21,7 +21,7 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
 
     val agendaManager = AgendaDBManager(context, scope)
     var climas = agendaManager.getClimas()
-    var climasApi = mutableListOf<Clima>()
+    private val calendar = Calendar.getInstance()
     val repoUtil = RepoUtil()
 
     override fun loadData() {
@@ -37,15 +37,6 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
                 if (response.body() != null){
                     agendaManager.insertarClimas(repoUtil.mapperApiClima(response.body()!!))
                 }
-                val calendar = Calendar.getInstance()
-                Log.d("AAA", "fecha ${SimpleDateFormat("dd/MM/yyyy").format(calendar.time)}")
-                if (repoUtil.diff(SharedPrefenrecesManager(context).getDate()) != 0L){
-                    SharedPrefenrecesManager(context).addSharedPreferences(
-                        SimpleDateFormat("dd/MM/yyyy").format(calendar.time)
-                    )
-                }
-                Log.d("AAA", "fecha desde Shared ${SharedPrefenrecesManager(context).getDate()}")
-
             }
 
             override fun onFailure(call: Call<Clima>, t: Throwable) {
@@ -54,7 +45,7 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
         })
     }
 
-    override fun insetarTarea(tarea: TareaEntidad) {
+    override fun insetarTarea(tarea: List<TareaEntidad>) {
         agendaManager.insertarTarea(tarea)
     }
 
@@ -63,8 +54,23 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
         return agendaManager.getTareas(climaId)
     }
 
-    override fun deleteTarea(tarea: TareaEntidad) {
-        TODO("Not yet implemented")
+    override fun loadAllTareas(): LiveData<List<TareaEntidad>> {
+        return  agendaManager.getAllTareas()
+    }
+
+    override fun actualizarTareas(lista:List<TareaEntidad>) {
+        deleteTarea()
+        Log.d("AAA", "fecha ${SimpleDateFormat("dd/MM/yyyy").format(calendar.time)}")
+        var diff = repoUtil.diff(SharedPrefenrecesManager(context).getDate())
+        SharedPrefenrecesManager(context).addSharedPreferences(
+            SimpleDateFormat("dd/MM/yyyy").format(calendar.time))
+        Log.d("AAA", "fecha desde Shared ${SharedPrefenrecesManager(context).getDate()}")
+        agendaManager.insertarTarea(repoUtil.tareasCleaner(lista, diff))
+    }
+
+
+    override fun deleteTarea() {
+        agendaManager.deleteTarea()
     }
 
 }

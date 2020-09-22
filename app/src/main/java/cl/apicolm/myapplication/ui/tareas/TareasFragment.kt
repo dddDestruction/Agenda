@@ -64,10 +64,9 @@ class TareasFragment : Fragment() {
             })
         adapter.selectedItem.observe(viewLifecycleOwner, Observer{
             Log.d("AAA", "Lista tareas ${climaId}")
-            tareasViewModel.repository.insetarTarea(TareaEntidad(
-                climaId,
-                it
-            ))
+            tareasViewModel.repository.insetarTarea(
+                listOf(TareaEntidad( climaId,it))
+            )
         })
     }
     fun initRecycler(root:View){

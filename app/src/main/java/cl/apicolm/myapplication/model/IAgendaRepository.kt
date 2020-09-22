@@ -7,7 +7,9 @@ import cl.apicolm.myapplication.model.pojo.Clima
 
 interface IAgendaRepository {
     fun loadData()
-    fun insetarTarea(tarea: TareaEntidad)
+    fun insetarTarea(tarea: List<TareaEntidad>)
     fun loadTareas(climaId:Int): LiveData<List<TareaEntidad>>
-    fun deleteTarea(tarea: TareaEntidad)
+    fun loadAllTareas(): LiveData<List<TareaEntidad>>
+    fun actualizarTareas(lista:List<TareaEntidad>)
+    fun deleteTarea()
 }

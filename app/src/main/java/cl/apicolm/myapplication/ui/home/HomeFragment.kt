@@ -11,7 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.apicolm.myapplication.R
+import cl.apicolm.myapplication.model.RepoUtil
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
+import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
 import cl.apicolm.myapplication.ui.tareas.TareasAdapter
 import cl.apicolm.myapplication.ui.tareas.TareasViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -19,9 +21,8 @@ import kotlinx.android.synthetic.main.fragment_tareas.view.*
 
 class HomeFragment : Fragment() {
 
-    private lateinit var tareasViewModel: TareasViewModel
-    private var climaId:Int = 0
-
+    private lateinit var homeViewModel: HomeViewModel
+    private val climaId = 0
     private lateinit var adapter: TareasAdapter
 
     override fun onCreateView(
@@ -31,28 +32,36 @@ class HomeFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
         initRecycler(root)
-        initObservers(climaId)
+        initObservers()
         return root
     }
 
 
-    fun initObservers(climaId:Int){
-        tareasViewModel =
-            ViewModelProviders.of(this).get(TareasViewModel::class.java)
-        tareasViewModel.loadTareas(climaId)
+    fun initObservers(){
+        homeViewModel =
+            ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel.loadAllTareas()
             .observe(viewLifecycleOwner, Observer {
-                for (ele in it){
-                    Log.d("AAA", "Lista tareas ${ele.climaId}")
+                Log.d("AAA", "fecha SharedPreferences ${SharedPrefenrecesManager(requireContext()).getDate()}")
+                if (RepoUtil().diff(SharedPrefenrecesManager(requireContext()).getDate())> 0L){
+                    homeViewModel.actualizarTareas(it)
+                }else{
+                    for (tarea in it as MutableList<TareaEntidad>){
+                        if  (tarea.climaId != 0){
+                            it.remove(tarea)
+                        }
+                    }
+                    adapter.update(it)
                 }
-
-                adapter.update(it)
             })
         adapter.selectedItem.observe(viewLifecycleOwner, Observer{
             Log.d("AAA", "Lista tareas ${climaId}")
-            tareasViewModel.repository.insetarTarea(
-                TareaEntidad(
-                    climaId,
-                    it
+            homeViewModel.repository.insetarTarea(
+                listOf(
+                    TareaEntidad(
+                        climaId,
+                        it
+                    )
                 )
             )
         })

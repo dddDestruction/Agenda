@@ -20,14 +20,17 @@ class AgendaDBManager(val context: Context, val scope:CoroutineScope):IAgendaDBM
     }
 
     override fun getTareas(climaId: Int):LiveData<List<TareaEntidad>> {
-        return agendaDao.getAllTareas(climaId)
+        return agendaDao.getTareas(climaId)
+    }
+    override fun getAllTareas():LiveData<List<TareaEntidad>> {
+        return agendaDao.getAllTareas()
     }
 
-    override fun insertarTarea(tareaEntidad: TareaEntidad) = scope.launch  {
+    override fun insertarTarea(tareaEntidad: List<TareaEntidad>) = scope.launch  {
         agendaDao.insertTarea(tareaEntidad)
     }
 
-    override fun deleteTarea(tareaEntidad: TareaEntidad) = scope.launch  {
-        TODO("Not yet implemented")
+    override fun deleteTarea() = scope.launch  {
+        agendaDao.borrarTarea()
     }
 }

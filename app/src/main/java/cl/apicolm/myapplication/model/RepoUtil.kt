@@ -55,14 +55,14 @@ class RepoUtil():IRepoUtil {
         val valores = fecha.split("/")
         val dia = Calendar.getInstance()
 
-        Log.d("AAA", "dia diff AgendaRepository ${dia.time}")
+        Log.d("AAA", "dia diff RepoUtil ${dia.time}, mes ${Calendar.SEPTEMBER}")
         try {
-            dia.set(valores[2].toInt(), valores[1].toInt(), valores[0].toInt())
+            dia.set(valores[2].toInt(), valores[1].toInt()-1, valores[0].toInt())
         }catch (e:Exception){
-            Log.d("AAA", "Error diff AgendaRepository ${e.message}")
+            Log.d("AAA", "Error diff RepoUtil ${e.message}")
         }
         val hoy = Calendar.getInstance().timeInMillis/(milisAdias)-dia.timeInMillis/(milisAdias)
-
+         Log.d("AAA", "return diff RepoUtil $hoy, calendar ${Calendar.getInstance().timeInMillis/(milisAdias)}, dia guardado ${dia.time}")
         return hoy
     }
 

@@ -9,6 +9,7 @@ interface IAgendaDBManager {
     fun getClimas():LiveData<List<ClimaEntidad>>
     fun insertarClimas(climas:List<ClimaEntidad>):Job
     fun getTareas(climaId:Int):LiveData<List<TareaEntidad>>
-    fun insertarTarea(tareaEntidad: TareaEntidad): Job
-    fun deleteTarea(tareaEntidad: TareaEntidad):Job
+    fun insertarTarea(tareaEntidad: List<TareaEntidad>): Job
+    fun getAllTareas(): LiveData<List<TareaEntidad>>
+    fun deleteTarea():Job
 }
