@@ -12,3 +12,6 @@
 /captures
 .externalNativeBuild
 .cxx
+
+#Constantes
+.app/src/main/java/cl/apicolm/myapplication/model/Constantes.kt
