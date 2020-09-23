@@ -1,14 +1,17 @@
 package cl.apicolm.myapplication.model
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import cl.apicolm.myapplication.model.api.RetrofitClient
 import cl.apicolm.myapplication.model.db.AgendaDBManager
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 import cl.apicolm.myapplication.model.pojo.Clima
 import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
+import cl.apicolm.myapplication.util.Location
 import kotlinx.coroutines.CoroutineScope
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,10 +27,11 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
     private val calendar = Calendar.getInstance()
     val repoUtil = RepoUtil()
 
-    override fun loadData() {
+    override fun loadData(location: android.location.Location) {
 
         val retrofit = RetrofitClient.retrofitInstance()
-        val call = retrofit.getClima(0.0,0.0,"hourly,minutely", KEY)
+        Log.d("AAA", "valores a llamada ${location.latitude}, ${location.longitude}")
+        val call = retrofit.getClima(location.latitude,location.longitude,"hourly,minutely", KEY)
         call.enqueue(object : Callback<Clima> {
             override fun onResponse(
                 call: retrofit2.Call<Clima>,
@@ -73,4 +77,8 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
         agendaManager.deleteTarea()
     }
 
+    //códigos de localización
+    override fun obtenerLocalizacion(activity: Activity): MutableLiveData<android.location.Location> {
+        return Location(activity).localizacion()
+    }
 }

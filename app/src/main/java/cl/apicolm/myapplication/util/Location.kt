@@ -2,15 +2,11 @@ package cl.apicolm.myapplication.util
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
@@ -33,9 +29,9 @@ class Location(var activity: Activity) {
     // last location to create a Notification if the user navigates away from the app.
     private var currentLocation: Location? = null
 
-    var localizacion: MutableLiveData<MutableList<Double>> = MutableLiveData(mutableListOf(0.0, 0.0))
+    var localizacion: MutableLiveData<Location> = MutableLiveData()
 
-    fun localizacion(){
+    fun localizacion():MutableLiveData<Location>{
         Log.d("AAA", "Localización localizacion")
         pedirPermiso()
         cliente = LocationServices.getFusedLocationProviderClient(activity)
@@ -48,9 +44,10 @@ class Location(var activity: Activity) {
             llamarGPS()
             cliente.lastLocation.addOnSuccessListener {
                 Log.d("AAA", "localizacion latitud: ${it?.latitude}, longitud: ${it?.longitude}")
-                localizacion.value = mutableListOf(it.latitude, it.longitude)
+                localizacion.value = it
             }
         }
+        return localizacion
     }
 
     fun pedirPermiso(){

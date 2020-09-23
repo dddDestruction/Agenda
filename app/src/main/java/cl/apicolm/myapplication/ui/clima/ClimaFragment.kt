@@ -37,12 +37,6 @@ class ClimaFragment : Fragment() {
         }catch (e:Exception){
             Log.d("AAA", "Error en fab ClimaFragment $e")
         }
-        val localizacion = Location(requireActivity())
-        localizacion.localizacion()
-        localizacion.localizacion.observe(viewLifecycleOwner, Observer {
-            Log.d("AAA", "Latitud ${it[0]}, Longitud ${it[1]}")
-            localizacion.terminarLlamadaGPS()
-        })
         initViewModel()
         initRecycler(root)
         return root
@@ -51,10 +45,12 @@ class ClimaFragment : Fragment() {
     fun initViewModel(){
         climasViewModel =
             ViewModelProviders.of(this).get(ClimaViewModel::class.java)
-        climasViewModel.load()
-        climasViewModel.climas.observe(viewLifecycleOwner, Observer {
-            Log.d("AAA", "En Main, $it")
-            adapter.update(it)
+        climasViewModel.localizacion(requireActivity()).observe(viewLifecycleOwner, Observer {
+            climasViewModel.load(it)
+            climasViewModel.climas.observe(viewLifecycleOwner, Observer {
+                Log.d("AAA", "En Main, $it")
+                adapter.update(it)
+            })
         })
     }
     fun initRecycler(root:View){
