@@ -27,7 +27,7 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
     override fun loadData() {
 
         val retrofit = RetrofitClient.retrofitInstance()
-        val call = retrofit.getClima(0.0,0.0,"hourly,minutely","b2a60a866478dbb03febc32b537c1896")
+        val call = retrofit.getClima(0.0,0.0,"hourly,minutely", KEY)
         call.enqueue(object : Callback<Clima> {
             override fun onResponse(
                 call: retrofit2.Call<Clima>,
