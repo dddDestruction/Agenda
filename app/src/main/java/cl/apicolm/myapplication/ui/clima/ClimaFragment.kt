@@ -45,12 +45,13 @@ class ClimaFragment : Fragment() {
     fun initViewModel(){
         climasViewModel =
             ViewModelProviders.of(this).get(ClimaViewModel::class.java)
+        climasViewModel.load()
+        climasViewModel.climas.observe(viewLifecycleOwner, Observer {
+            Log.d("AAA", "En Main, $it")
+            adapter.update(it)
+        })
         climasViewModel.localizacion(requireActivity()).observe(viewLifecycleOwner, Observer {
-            climasViewModel.load(it)
-            climasViewModel.climas.observe(viewLifecycleOwner, Observer {
-                Log.d("AAA", "En Main, $it")
-                adapter.update(it)
-            })
+            climasViewModel.load()
         })
     }
     fun initRecycler(root:View){

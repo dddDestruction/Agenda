@@ -15,7 +15,7 @@ class ClimaViewModel(application: Application) : AndroidViewModel(application)  
     fun localizacion(activity: Activity):MutableLiveData<Location>{
         return repository.obtenerLocalizacion(activity)
     }
-    fun load(localizacion:Location){
-        repository.loadData(localizacion)
+    fun load(){
+        repository.loadData()
     }
 }

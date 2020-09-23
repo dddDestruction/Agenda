@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cl.apicolm.myapplication.model.api.RetrofitClient
 import cl.apicolm.myapplication.model.db.AgendaDBManager
-import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 import cl.apicolm.myapplication.model.pojo.Clima
 import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
@@ -18,18 +17,19 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.truncate
 
 class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepository {
 
     val agendaManager = AgendaDBManager(context, scope)
     var climas = agendaManager.getClimas()
     private val calendar = Calendar.getInstance()
+    private val sharedPrefenrecesManager = SharedPrefenrecesManager(context)
     val repoUtil = RepoUtil()
 
-    override fun loadData(location: android.location.Location) {
+    override fun loadData() {
 
         val retrofit = RetrofitClient.retrofitInstance()
+        var location = sharedPrefenrecesManager.getCoords()
         Log.d("AAA", "valores a llamada ${location.latitude}, ${location.longitude}")
         val call = retrofit.getClima(location.latitude,location.longitude,"hourly,minutely", KEY)
         call.enqueue(object : Callback<Clima> {
@@ -65,10 +65,10 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
     override fun actualizarTareas(lista:List<TareaEntidad>) {
         deleteTarea()
         Log.d("AAA", "fecha ${SimpleDateFormat("dd/MM/yyyy").format(calendar.time)}")
-        var diff = repoUtil.diff(SharedPrefenrecesManager(context).getDate())
-        SharedPrefenrecesManager(context).addSharedPreferences(
+        var diff = repoUtil.diff(sharedPrefenrecesManager.getDate())
+        sharedPrefenrecesManager.addSharedPreferences(
             SimpleDateFormat("dd/MM/yyyy").format(calendar.time))
-        Log.d("AAA", "fecha desde Shared ${SharedPrefenrecesManager(context).getDate()}")
+        Log.d("AAA", "fecha desde Shared ${sharedPrefenrecesManager.getDate()}")
         agendaManager.insertarTarea(repoUtil.tareasCleaner(lista, diff))
     }
 
@@ -79,6 +79,11 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
 
     //códigos de localización
     override fun obtenerLocalizacion(activity: Activity): MutableLiveData<android.location.Location> {
-        return Location(activity).localizacion()
+        val coord = MutableLiveData<android.location.Location>()
+            Location(activity).localizacion().observeForever {
+            sharedPrefenrecesManager.addCoords(it)
+            coord.value = it
+        }
+        return coord
     }
 }
