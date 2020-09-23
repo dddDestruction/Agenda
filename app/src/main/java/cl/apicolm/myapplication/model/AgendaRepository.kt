@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import cl.apicolm.myapplication.BuildConfig
 import cl.apicolm.myapplication.model.api.RetrofitClient
 import cl.apicolm.myapplication.model.db.AgendaDBManager
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
@@ -31,7 +32,7 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
         val retrofit = RetrofitClient.retrofitInstance()
         var location = sharedPrefenrecesManager.getCoords()
         Log.d("AAA", "valores a llamada ${location.latitude}, ${location.longitude}")
-        val call = retrofit.getClima(location.latitude,location.longitude,"hourly,minutely", KEY)
+        val call = retrofit.getClima(location.latitude,location.longitude,"hourly,minutely", BuildConfig.API_KEY)
         call.enqueue(object : Callback<Clima> {
             override fun onResponse(
                 call: retrofit2.Call<Clima>,
