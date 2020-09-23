@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.AgendaRepository
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
+import cl.apicolm.myapplication.util.Location
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_clima.view.*
 
@@ -36,6 +37,12 @@ class ClimaFragment : Fragment() {
         }catch (e:Exception){
             Log.d("AAA", "Error en fab ClimaFragment $e")
         }
+        val localizacion = Location(requireActivity())
+        localizacion.localizacion()
+        localizacion.localizacion.observe(viewLifecycleOwner, Observer {
+            Log.d("AAA", "Latitud ${it[0]}, Longitud ${it[1]}")
+            localizacion.terminarLlamadaGPS()
+        })
         initViewModel()
         initRecycler(root)
         return root
