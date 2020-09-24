@@ -82,8 +82,10 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
     override fun obtenerLocalizacion(activity: Activity): MutableLiveData<android.location.Location> {
         val coord = MutableLiveData<android.location.Location>()
             Location(activity).localizacion().observeForever {
-            sharedPrefenrecesManager.addCoords(it)
-            coord.value = it
+                if  (it != null){
+                    sharedPrefenrecesManager.addCoords(it)
+                    coord.value = it
+                }
         }
         return coord
     }
