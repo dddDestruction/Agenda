@@ -1,11 +1,8 @@
 package cl.apicolm.myapplication
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import android.view.View
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,9 +13,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.Observer
-import cl.apicolm.myapplication.model.AgendaRepository
-import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,17 +24,9 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        //Código para activar el debuging
-        val picasso = Picasso.Builder(this)
-            .indicatorsEnabled( true )
-            .loggingEnabled( true )
-            .build()
-
-        //Se inicializa el objeto singleton
-        //Picasso.setSingletonInstance(picasso)
-
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.visibility = View.VISIBLE
+        // Se agrega funcionalidad al botón flotante para que aparezca el formulario para ingresar tareas
         fab.setOnClickListener { view ->
             findViewById<ConstraintLayout>(R.id.formulario).visibility = View.VISIBLE
         }
@@ -53,12 +39,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
     }
 
     override fun onSupportNavigateUp(): Boolean {

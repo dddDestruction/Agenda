@@ -5,21 +5,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import cl.apicolm.myapplication.IViews
 import cl.apicolm.myapplication.R
 import cl.apicolm.myapplication.model.RepoUtil
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
 import cl.apicolm.myapplication.ui.tareas.TareasAdapter
-import cl.apicolm.myapplication.ui.tareas.TareasViewModel
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_tareas.view.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), IViews {
 
     private lateinit var homeViewModel: HomeViewModel
     private val climaId = 0
@@ -37,12 +35,11 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun initObservers(){
+    override fun initObservers(){
         homeViewModel =
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         homeViewModel.loadAllTareas()
             .observe(viewLifecycleOwner, Observer {
-                Log.d("AAA", "fecha SharedPreferences ${SharedPrefenrecesManager(requireContext()).getDate()}")
                 if (RepoUtil().diff(SharedPrefenrecesManager(requireContext()).getDate())> 0L){
                     homeViewModel.actualizarTareas(it)
                 }else{
@@ -55,7 +52,6 @@ class HomeFragment : Fragment() {
                 }
             })
         adapter.selectedItem.observe(viewLifecycleOwner, Observer{
-            Log.d("AAA", "Lista tareas ${climaId}")
             homeViewModel.repository.insetarTarea(
                 listOf(
                     TareaEntidad(
@@ -66,7 +62,7 @@ class HomeFragment : Fragment() {
             )
         })
     }
-    fun initRecycler(root:View){
+    override fun initRecycler(root:View){
         adapter = TareasAdapter(listOf<TareaEntidad>())
         val recyclerView = root.recyclerHome
         recyclerView.adapter = adapter

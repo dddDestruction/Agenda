@@ -88,12 +88,12 @@ class DataBaseTest {
     @Test
     @Throws(Exception::class)
     fun insertarYobtenerTareas() = runBlocking {
-        val tarea1 = TareaEntidad(1,
+        val tarea1 =listOf( TareaEntidad(1,
             "tarea1"
-        )
+        ))
 
         agendaDao.insertTarea(tarea1)
-        agendaDao.getAllTareas(1).observeForever {
+        agendaDao.getAllTareas().observeForever {
             listaRes->
             assertThat(listaRes).isNotNull()
             assertThat(listaRes).hasSize(1)
