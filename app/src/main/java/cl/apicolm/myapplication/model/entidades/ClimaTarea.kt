@@ -1,21 +1,7 @@
 package cl.apicolm.myapplication.model.entidades
 
-import androidx.room.Embedded
-import androidx.room.Relation
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
-/*
-data class ClimaTarea(
-    @Embedded val dia: ClimaEntidad,
-    @Relation(
-                          parentColumn = "id",
-                          entityColumn = "climaId"
-                      )
-    val tareas: List<TareaEntidad>
-)
-
- */
 
 @Entity(tableName = "climas")
 data class ClimaEntidad(
@@ -27,7 +13,6 @@ data class ClimaEntidad(
     var descripcionClima:String,
     var iconClima:String,
     var diaSemana:String
-    //@Embedded val tarea: TareaEntidad
 )
 
 @Entity(tableName = "tareas")

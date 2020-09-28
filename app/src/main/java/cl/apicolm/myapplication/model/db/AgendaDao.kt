@@ -3,7 +3,6 @@ package cl.apicolm.myapplication.model.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
-//import cl.apicolm.myapplication.model.entidades.ClimaTarea
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 
 @Dao
