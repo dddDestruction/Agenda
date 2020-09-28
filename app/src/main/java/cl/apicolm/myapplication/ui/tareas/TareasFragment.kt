@@ -1,7 +1,6 @@
 package cl.apicolm.myapplication.ui.tareas
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +51,6 @@ class TareasFragment : Fragment(), IViews {
                 adapter.update(it)
             })
         adapter.selectedItem.observe(viewLifecycleOwner, Observer{
-            Log.d("AAA", "Lista tareas ${climaId}")
             tareasViewModel.repository.insetarTarea(
                 listOf(TareaEntidad( climaId,it))
             )

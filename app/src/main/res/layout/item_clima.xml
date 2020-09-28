@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dim_20"
             android:textSize="@dimen/letra_30sp"
-            android:text="Dia"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="@+id/iconoClima"
             app:layout_constraintStart_toEndOf="@+id/iconoClima"
             app:layout_constraintTop_toTopOf="@+id/iconoClima" />
