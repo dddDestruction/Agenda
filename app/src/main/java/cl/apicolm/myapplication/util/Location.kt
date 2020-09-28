@@ -5,16 +5,13 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import java.util.concurrent.TimeUnit
 
-class Location(var activity: Activity) {
+class Location(var activity: Activity):ILocation {
 
-    private val TAG = "AAA"
-    // TODO: Step 1.1, Review variables (no changes).
     // FusedLocationProviderClient - Main class for receiving location updates.
     private lateinit var cliente: FusedLocationProviderClient
     // LocationRequest - Requirements for the location updates, i.e., how often you should receive
@@ -31,8 +28,7 @@ class Location(var activity: Activity) {
 
     var localizacion: MutableLiveData<Location> = MutableLiveData()
 
-    fun localizacion():MutableLiveData<Location>{
-        Log.d("AAA", "Localización localizacion")
+    override fun localizacion():MutableLiveData<Location>{
         pedirPermiso()
         cliente = LocationServices.getFusedLocationProviderClient(activity)
 
@@ -43,14 +39,13 @@ class Location(var activity: Activity) {
             crearLocationCallback()
             llamarGPS()
             cliente.lastLocation.addOnSuccessListener {
-                Log.d("AAA", "localizacion latitud: ${it?.latitude}, longitud: ${it?.longitude}")
                 localizacion.value = it
             }
         }
         return localizacion
     }
 
-    fun pedirPermiso(){
+    override fun pedirPermiso(){
         ActivityCompat.requestPermissions(
             activity,
             arrayOf(
@@ -61,7 +56,7 @@ class Location(var activity: Activity) {
         )
     }
 
-    fun crearLocationRequest(){
+    override fun crearLocationRequest(){
         locationRequest = LocationRequest().apply {
             // Sets the desired interval for active location updates. This interval is inexact. You
             // may not receive updates at all if no location sources are available, or you may
@@ -86,7 +81,7 @@ class Location(var activity: Activity) {
         }
     }
 
-    fun crearLocationCallback(){
+    override fun crearLocationCallback(){
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
@@ -97,40 +92,30 @@ class Location(var activity: Activity) {
                     // things a bit and just saving it as a local variable, as we only need it again
                     // if a Notification is created (when the user navigates away from app).
                     currentLocation = locationResult.lastLocation
-                    Log.d(TAG, "Location ${currentLocation?.latitude}, ${currentLocation?.longitude}")
 
-                } else {
-                    Log.d(TAG, "Location missing in callback.")
                 }
             }
         }
     }
 
-    fun llamarGPS(){
+    override fun llamarGPS(){
         try {
             // TODO: Step 1.5, Subscribe to location changes.
             cliente.requestLocationUpdates(
                 locationRequest, locationCallback, Looper.myLooper())
         } catch (unlikely: SecurityException) {
-            Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
 
-    fun terminarLlamadaGPS(){
-        Log.d(TAG, "terminarLlamadaGPS()")
+    override fun terminarLlamadaGPS(){
 
         try {
             // TODO: Step 1.6, Unsubscribe to location changes.
             val removeTask = cliente.removeLocationUpdates(locationCallback)
             removeTask.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "Location Callback removed.")
-                } else {
-                    Log.d(TAG, "Failed to remove Location Callback.")
-                }
+
             }
         } catch (unlikely: SecurityException) {
-            Log.e(TAG, "Lost location permissions. Couldn't remove updates. $unlikely")
         }
     }
 }
