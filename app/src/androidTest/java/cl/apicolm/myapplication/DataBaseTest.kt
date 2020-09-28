@@ -97,7 +97,39 @@ class DataBaseTest {
             listaRes->
             assertThat(listaRes).isNotNull()
             assertThat(listaRes).hasSize(1)
-            assertThat(listaRes[0]).isEqualTo(tarea1)
+            assertThat(listaRes).isEqualTo(tarea1)
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertarYobtenerTareasConId() = runBlocking {
+        val tarea1 = TareaEntidad(1, "tarea1")
+        val tarea2 = TareaEntidad(2, "tarea2")
+        val lista =listOf( tarea1,tarea2)
+
+        agendaDao.insertTarea(lista)
+        agendaDao.getTareas(2).observeForever {
+                listaRes->
+            assertThat(listaRes).isNotNull()
+            assertThat(listaRes).hasSize(1)
+            assertThat(listaRes[0]).isEqualTo(tarea2)
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun borrarTareas() = runBlocking {
+        val tarea1 =listOf( TareaEntidad(1,
+            "tarea1"
+        ))
+
+        agendaDao.insertTarea(tarea1)
+        agendaDao.borrarTarea()
+        agendaDao.getAllTareas().observeForever {
+                listaRes->
+            assertThat(listaRes).isNotNull()
+            assertThat(listaRes).hasSize(0)
         }
 
     }
