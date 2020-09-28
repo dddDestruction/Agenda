@@ -43,12 +43,13 @@ class HomeFragment : Fragment(), IViews {
                 if (RepoUtil().diff(SharedPrefenrecesManager(requireContext()).getDate())> 0L){
                     homeViewModel.actualizarTareas(it)
                 }else{
-                    for (tarea in it as MutableList<TareaEntidad>){
-                        if  (tarea.climaId != 0){
-                            it.remove(tarea)
+                    var listaAuxiliar = mutableListOf<TareaEntidad>()
+                    for (tarea in it){
+                        if  (tarea.climaId == 0){
+                            listaAuxiliar.add(tarea)
                         }
                     }
-                    adapter.update(it)
+                    adapter.update(listaAuxiliar)
                 }
             })
         adapter.selectedItem.observe(viewLifecycleOwner, Observer{
