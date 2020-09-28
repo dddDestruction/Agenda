@@ -2,7 +2,6 @@ package cl.apicolm.myapplication.model
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cl.apicolm.myapplication.BuildConfig
@@ -31,21 +30,18 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
 
         val retrofit = RetrofitClient.retrofitInstance()
         var location = sharedPrefenrecesManager.getCoords()
-        Log.d("AAA", "valores a llamada ${location.latitude}, ${location.longitude}")
         val call = retrofit.getClima(location.latitude,location.longitude,"hourly,minutely", BuildConfig.API_KEY)
         call.enqueue(object : Callback<Clima> {
             override fun onResponse(
                 call: retrofit2.Call<Clima>,
                 response: Response<Clima>
             ) {
-                Log.d("AAA", response.body().toString())
                 if (response.body() != null){
                     agendaManager.insertarClimas(repoUtil.mapperApiClima(response.body()!!))
                 }
             }
 
             override fun onFailure(call: Call<Clima>, t: Throwable) {
-                Log.d("AAA", "Error: " + t)
             }
         })
     }
@@ -55,7 +51,6 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
     }
 
     override fun loadTareas(climaId:Int):LiveData<List<TareaEntidad>> {
-        Log.d("AAA", "loadTareas ${agendaManager.getTareas(climaId).value}")
         return agendaManager.getTareas(climaId)
     }
 
@@ -65,11 +60,9 @@ class AgendaRepository( val context: Context, scope: CoroutineScope):IAgendaRepo
 
     override fun actualizarTareas(lista:List<TareaEntidad>) {
         deleteTarea()
-        Log.d("AAA", "fecha ${SimpleDateFormat("dd/MM/yyyy").format(calendar.time)}")
         var diff = repoUtil.diff(sharedPrefenrecesManager.getDate())
         sharedPrefenrecesManager.addSharedPreferences(
             SimpleDateFormat("dd/MM/yyyy").format(calendar.time))
-        Log.d("AAA", "fecha desde Shared ${sharedPrefenrecesManager.getDate()}")
         agendaManager.insertarTarea(repoUtil.tareasCleaner(lista, diff))
     }
 

@@ -1,14 +1,12 @@
 package cl.apicolm.myapplication.model
 
-import android.util.Log
 import cl.apicolm.myapplication.model.entidades.ClimaEntidad
 import cl.apicolm.myapplication.model.entidades.TareaEntidad
 import cl.apicolm.myapplication.model.pojo.Clima
-import cl.apicolm.myapplication.model.sharedPreferences.SharedPrefenrecesManager
 import java.util.*
 import kotlin.math.truncate
 
-class RepoUtil():IRepoUtil {
+class RepoUtil:IRepoUtil {
 
     override fun mapperApiClima(clima: Clima): List<ClimaEntidad> {
         var calendar = Calendar.getInstance()
@@ -41,7 +39,6 @@ class RepoUtil():IRepoUtil {
                 i++
             }
         }
-        Log.d("AAA", "lista: ${listaClima.toString()}")
         return listaClima
     }
 
@@ -55,14 +52,12 @@ class RepoUtil():IRepoUtil {
         val valores = fecha.split("/")
         val dia = Calendar.getInstance()
 
-        Log.d("AAA", "dia diff RepoUtil ${dia.time}, mes ${Calendar.SEPTEMBER}")
         try {
             dia.set(valores[2].toInt(), valores[1].toInt()-1, valores[0].toInt())
         }catch (e:Exception){
-            Log.d("AAA", "Error diff RepoUtil ${e.message}")
+
         }
         val hoy = Calendar.getInstance().timeInMillis/(milisAdias)-dia.timeInMillis/(milisAdias)
-         Log.d("AAA", "return diff RepoUtil $hoy, calendar ${Calendar.getInstance().timeInMillis/(milisAdias)}, dia guardado ${dia.time}")
         return hoy
     }
 
