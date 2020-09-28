@@ -62,7 +62,7 @@ class ClimaFragment : Fragment(), IViews {
         adapter.selectedItem.observe(this, Observer {
             val bundle = Bundle()
             bundle.putInt("climaId", it.id )
-            Navigation.findNavController(this.requireView()).navigate(R.id.action_nav_gallery_to_nav_slideshow, bundle)
+            Navigation.findNavController(this.requireView()).navigate(R.id.action_nav_clima_to_nav_tareas, bundle)
         })
         super.onAttach(activity)
     }
